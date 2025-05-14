@@ -31,16 +31,15 @@ func main() {
 		ReadConfig: client.ReadConfig{
 			BridgeDAAddr: "https://clean-wiser-glitter.celestia-mocha.quiknode.pro/1adb9c87496929d258c7c358889d921963011005",
 			DAAuthToken:  "",
-			EnableDATLS:  false,
+			EnableDATLS:  true,
 		},
-		// how to get this to post using the Quicknode endpoint?
 		SubmitConfig: client.SubmitConfig{
 			DefaultKeyName: keyname,
 			Network:        "mocha-4",
 			CoreGRPCConfig: client.CoreGRPCConfig{
-				Addr:       "celestia-testnet-consensus.itrocket.net:9090", // or rpc-mocha.pops.one:9090
-				TLSEnabled: false,
-				AuthToken:  "",
+				Addr:       "clean-wiser-glitter.celestia-mocha.quiknode.pro:9090", // or rpc-mocha.pops.one:9090
+				TLSEnabled: true,
+				AuthToken:  "1adb9c87496929d258c7c358889d921963011005",
 			},
 		},
 	}

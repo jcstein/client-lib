@@ -343,8 +343,8 @@ github.com/celestiaorg/celestia-app/v3 v3.8.1 h1:dbXhXDx34hG6cp3/pMvGcy0mIja0e4N
 github.com/celestiaorg/celestia-app/v3 v3.8.1/go.mod h1:5NmN7fLvPkpK9Ihslhvz1JNHDFF9VJTnlKGXWQivUVQ=
 github.com/celestiaorg/celestia-core v1.51.0-tm-v0.34.35 h1:B9CRRq3VtraIe3JktqepeGo6TyuUCDivMgUgwd6vEeE=
 github.com/celestiaorg/celestia-core v1.51.0-tm-v0.34.35/go.mod h1:SI38xqZZ4ccoAxszUJqsJ/a5rOkzQRijzHQQlLKkyUc=
-github.com/celestiaorg/celestia-node v0.22.2-client-lib-rc h1:biEEXqhAmgDMeEmTG0KQKNodEEfc0pQaeOvGYvq3ULk=
-github.com/celestiaorg/celestia-node v0.22.2-client-lib-rc/go.mod h1:BEIXDEcy7hF2bnwzA6wCyOAdI4yQMsHc7WCchKm7t5w=
+github.com/celestiaorg/celestia-node v0.22.2-client-lib-rc2 h1:Lrpd8S/t8pYdmGkciG9Y3LDn/2WRZzRNREAfdMpAe3c=
+github.com/celestiaorg/celestia-node v0.22.2-client-lib-rc2/go.mod h1:BEIXDEcy7hF2bnwzA6wCyOAdI4yQMsHc7WCchKm7t5w=
 github.com/celestiaorg/cosmos-sdk v1.28.2-sdk-v0.46.16 h1:ji0bbcOla+nzu3G9Cq13O6KHGXensAi0Sf7+leW8m1Y=
 github.com/celestiaorg/cosmos-sdk v1.28.2-sdk-v0.46.16/go.mod h1:8Wvxp2fu7ZMEz2sJVlfZiCqgdjLMNVosuE1O0X2yR5c=
 github.com/celestiaorg/go-fraud v0.2.1 h1:oYhxI0gM/EpGRgbVQdRI/LSlqyT65g/WhQGSVGfx09w=
@@ -1053,6 +1053,8 @@ github.com/jmespath/go-jmespath/internal/testify v1.5.1 h1:shLQSRRSCCPj3f2gpwzGw
 github.com/jmespath/go-jmespath/internal/testify v1.5.1/go.mod h1:L3OGu8Wl2/fWfCI6z80xFu9LTZmf1ZRjMHUOPmWr69U=
 github.com/jmhodges/levigo v1.0.0 h1:q5EC36kV79HWeTBWsod3mG11EgStG3qArTKcvlksN1U=
 github.com/jmhodges/levigo v1.0.0/go.mod h1:Q6Qx+uH3RAqyK4rFQroq9RL7mdkABMcfhEI+nNuzMJQ=
+github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
+github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
 github.com/jonboulle/clockwork v0.1.0/go.mod h1:Ii8DK3G1RaLaWxj9trq07+26W01tbo22gdxWY5EU2bo=
 github.com/jpillora/backoff v1.0.0/go.mod h1:J/6gKK9jxlEcS3zixgDgUAsiuZ7yrSoa/FX5e0EB2j4=
 github.com/jrick/logrotate v1.0.0/go.mod h1:LNinyqDIJnpAur+b8yyulnQw/wDuN1+BYKlTRt3OuAQ=

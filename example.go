@@ -2,8 +2,12 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"log"
+	"net/http"
+	"os"
 	"time"
+
+	"github.com/joho/godotenv"
 
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 
@@ -14,66 +18,129 @@ import (
 )
 
 func main() {
+	// Set up logging with microsecond precision
+	log.SetFlags(log.LstdFlags | log.Lmicroseconds)
+	log.Println("Starting Celestia client example")
+	
+	// Load environment variables from .env
+	log.Println("Loading environment variables")
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Error loading .env file:", err)
+		return
+	}
+	log.Println("Environment variables loaded successfully")
+
 	// Initialize keyring with new key
 	keyname := "my_celes_key"
+	log.Println("Initializing keyring with key name:", keyname)
 	kr, err := client.KeyringWithNewKey(client.KeyringConfig{
 		KeyName:     keyname,
 		BackendName: keyring.BackendTest,
 	}, "../../.celestia-light-mocha-4/keys/")
 	if err != nil {
-		fmt.Println("failed to create keyring:", err)
+		log.Println("Failed to create keyring:", err)
+		return
+	}
+	log.Println("Keyring successfully initialized")
+
+	// Get authentication credentials from environment variables
+	log.Println("Configuring Celestia client")
+	quickNodeAuthToken := os.Getenv("QUICKNODE_AUTH_TOKEN")
+	if quickNodeAuthToken == "" {
+		log.Println("QUICKNODE_AUTH_TOKEN not found in environment variables")
+		return
+	}
+	
+	quickNodeBridgeURL := os.Getenv("QUICKNODE_BRIDGE_URL")
+	if quickNodeBridgeURL == "" {
+		log.Println("QUICKNODE_BRIDGE_URL not found in environment variables")
+		return
+	}
+	
+	quickNodeGRPCURL := os.Getenv("QUICKNODE_GRPC_URL")
+	if quickNodeGRPCURL == "" {
+		log.Println("QUICKNODE_GRPC_URL not found in environment variables")
 		return
 	}
 
-	// Configure client
+	log.Println("Setting up QuickNode authentication")
+	
+	// Initialize empty HTTP headers (not needed with token in URL)
+	emptyHeaders := http.Header{}
+	
+	// Build the full URL with authentication token
+	fullBridgeURL := quickNodeBridgeURL + "/" + quickNodeAuthToken
+	log.Printf("Using bridge URL: %s", fullBridgeURL)
+	
+	// Configure Celestia client
 	cfg := client.Config{
-		// this can also be used with light node running at http://localhost:26658, must use --rpc.skip auth or add auth token
 		ReadConfig: client.ReadConfig{
-			BridgeDAAddr: "https://clean-wiser-glitter.celestia-mocha.quiknode.pro/1adb9c87496929d258c7c358889d921963011005",
-			DAAuthToken:  "",
+			BridgeDAAddr: fullBridgeURL,
+			HTTPHeader:   emptyHeaders,
 			EnableDATLS:  true,
 		},
 		SubmitConfig: client.SubmitConfig{
 			DefaultKeyName: keyname,
 			Network:        "mocha-4",
 			CoreGRPCConfig: client.CoreGRPCConfig{
-				Addr:       "clean-wiser-glitter.celestia-mocha.quiknode.pro:9090", // or rpc-mocha.pops.one:9090
+				Addr:       quickNodeGRPCURL,
 				TLSEnabled: true,
-				AuthToken:  "1adb9c87496929d258c7c358889d921963011005",
+				AuthToken:  quickNodeAuthToken,
 			},
 		},
 	}
+	log.Println("Client configuration complete")
 
-	// Create client with full submission capabilities
+	// Initialize Celestia client
+	log.Println("Creating Celestia client")
 	ctx := context.Background()
 	client, err := client.New(ctx, cfg, kr)
 	if err != nil {
-		fmt.Println("failed to create client:", err)
+		log.Println("Failed to create client:", err)
 		return
 	}
+	log.Println("Client successfully created")
 
+	// Set timeout for operations
+	log.Println("Setting up context with 1-minute timeout")
 	ctx, cancel := context.WithTimeout(ctx, time.Minute)
 	defer cancel()
 
-	// Submit a blob
+	// Create and submit blob
+	log.Println("Creating namespace and blob for submission")
 	namespace := libshare.MustNewV0Namespace([]byte("example"))
-	b, err := blob.NewBlob(libshare.ShareVersionZero, namespace, []byte("data"), nil)
+	log.Println("Namespace created")
+	
+	data := []byte("data")
+	log.Printf("Creating new blob with %d bytes of data", len(data))
+	b, err := blob.NewBlob(libshare.ShareVersionZero, namespace, data, nil)
 	if err != nil {
-		fmt.Println("failed to create blob:", err)
+		log.Println("Failed to create blob:", err)
 		return
 	}
+	log.Println("Blob successfully created with commitment:", b.Commitment)
+
+	// Submit blob to network
+	log.Println("Submitting blob to the network...")
+	submitStart := time.Now()
 	height, err := client.Blob.Submit(ctx, []*blob.Blob{b}, nil)
 	if err != nil {
-		fmt.Println("failed to submit blob:", err)
+		log.Println("Failed to submit blob:", err)
 		return
 	}
-	fmt.Println("submitted blob", height)
+	log.Printf("Blob successfully submitted at height %d (took %v)", height, time.Since(submitStart))
 
-	// Retrieve a blob
+	// Retrieve blob from network
+	log.Println("Retrieving blob from the network...")
+	log.Printf("Querying for blob at height %d with namespace %x and commitment %x", height, namespace, b.Commitment)
+	getStart := time.Now()
 	retrievedBlob, err := client.Blob.Get(ctx, height, namespace, b.Commitment)
 	if err != nil {
-		fmt.Println("failed to retrieve blob:", err)
+		log.Println("Failed to retrieve blob:", err)
 		return
 	}
-	fmt.Println("retrieved blob", string(retrievedBlob.Data()))
+	log.Printf("Blob successfully retrieved (took %v)", time.Since(getStart))
+	log.Printf("Retrieved data: %s", string(retrievedBlob.Data()))
+	log.Println("Example completed successfully")
 }

@@ -14,7 +14,7 @@ replace (
 replace github.com/ipfs/boxo => github.com/celestiaorg/boxo v0.29.0-fork
 
 require (
-	github.com/celestiaorg/celestia-node v0.22.2-client-lib-rc
+	github.com/celestiaorg/celestia-node v0.22.2-client-lib-rc2
 	github.com/celestiaorg/go-square/v2 v2.2.0
 	github.com/cosmos/cosmos-sdk v0.46.16
 )
@@ -184,6 +184,7 @@ require (
 	github.com/jbenet/go-temp-err-catcher v0.1.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/jmhodges/levigo v1.0.0 // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
 	github.com/klauspost/reedsolomon v1.12.1 // indirect
